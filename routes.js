@@ -9,7 +9,6 @@
 
 const { sampleHandler } = require('./handlers/sampleHandler');
 const { userHandler } = require('./handlers/userHandler');
-
 // dependencies
 
 // module scaffolding

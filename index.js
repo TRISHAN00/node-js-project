@@ -11,21 +11,21 @@
 
 const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
-const environment = require('./helpers/environments');
+
 
 // module scaffolding
 const app = {};
 
-// // configaration
-// app.config = {
-//     port: 3000,
-// };
+// configaration
+app.config = {
+    port: 3000,
+};
 
 // create server
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
-    server.listen(environment.port, () => {
-        console.log(`listening to port ${environment.port}`);
+    server.listen(app.config.port, () => {
+        console.log(`listening to port ${app.config.port}`);
     });
 };
 

@@ -12,7 +12,7 @@ const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const routes = require('../routes');
 const { notFoundHandler } = require('../handlers/notFoundHandler');
-const { parseJSON } = require('./utilities');
+const { passeJSON } = require('./utilities');
 
 // module scaffolding
 const handler = {};
@@ -51,7 +51,8 @@ handler.handleReqRes = (req, res) => {
     req.on('end', () => {
         realData += decoder.end();
 
-        requiestProperties.body = parseJSON(realData);
+        // store realData in requestProperties
+        requiestProperties.body = passeJSON(realData);
 
         // call chosen handler
         choseHandler(requiestProperties, (statusCode, payload) => {
@@ -64,7 +65,7 @@ handler.handleReqRes = (req, res) => {
             res.writeHead(statusCode);
             res.end(payloadString);
         });
-        console.log(realData);
+
         // handle response
         res.end('hello ....');
     });

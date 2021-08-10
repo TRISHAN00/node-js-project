@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-unused-expressions */
 /*
  *
  * Title: User Route Handler
@@ -10,46 +8,49 @@
  */
 
 // dependencies
-const data = require('../lib/data');
 const { hash } = require('../helpers/utilities');
-
+const data = require('../lib/data');
 // module scaffolding
 const handler = {};
 
 handler.userHandler = (requiestProperties, callback) => {
-    // accepted method
-    const acceptedMethods = ['get', 'post', 'put', 'delete'];
-    if (acceptedMethods.indexOf(requiestProperties.method) > -1) {
-        handler._user[requiestProperties.method](requiestProperties, callback);
+    const acceptedMethod = ['get', 'post', 'put', 'delete'];
+    if (acceptedMethod.indexOf(requiestProperties.method) > -1) {
+        handler._users[requiestProperties.method](requiestProperties, callback);
     } else {
         callback(405);
     }
 };
 
 // user module scaffolding
-handler._user = {};
+handler._users = {};
 
-handler._user.post = (requiestProperties, callback) => {
+handler._users.post = (requiestProperties, callback) => {
+    // firstname validation
     const firstName = typeof requiestProperties.body.firstName === 'string';
-    // eslint-disable-next-line no-unused-expressions
     requiestProperties.body.firstName.trim().length > 0 ? requiestProperties.body.firstName : false;
 
+    // lastName
     const lastName = typeof requiestProperties.body.lastName === 'string';
     requiestProperties.body.lastName.trim().length > 0 ? requiestProperties.body.lastName : false;
 
-    const phone = typeof requiestProperties.body.phone === 'string';
-    requiestProperties.body.phone.trim().length === 10 ? requiestProperties.body.lastName : false;
-
+    // password
     const password = typeof requiestProperties.body.password === 'string';
-    requiestProperties.body.password.trim().length > 0 ? requiestProperties.body.lastName : false;
+    requiestProperties.body.password.trim().length > 0 ? requiestProperties.body.password : false;
 
+    // phone number
+    const phone = typeof requiestProperties.body.phone === 'string';
+    requiestProperties.body.phone.trim().length === 11 ? requiestProperties.body.phone : false;
+
+    // tosAgreement
     const tosAgreement = typeof requiestProperties.body.tosAgreement === 'boolean';
     requiestProperties.body.tosAgreement.trim().length > 0
         ? requiestProperties.body.tosAgreement
         : false;
 
-    if (firstName && lastName && phone && password && tosAgreement) {
-        // make sure already have data in req
+    // check all the field
+    if (firstName && lastName && password && phone && tosAgreement) {
+        // make sure that the user already exist or not
         data.read('users', phone, (err1) => {
             if (err1) {
                 const userObject = {
@@ -63,24 +64,31 @@ handler._user.post = (requiestProperties, callback) => {
                 data.create('users', phone, userObject, (err2) => {
                     if (!err2) {
                         callback(200, {
-                            message: 'user created succesfully',
+                            message: 'user created seccessfully',
                         });
                     } else {
-                        callback(500, {
-                            error: 'could not create user',
-                        });
+                        callback(500, { error: 'could not created user' });
                     }
                 });
             } else {
                 callback(500, {
-                    error: 'there was a problem in server side',
+                    error: 'there was a problem in your server side',
                 });
             }
         });
     } else {
         callback(400, {
-            error: 'You have a problem',
+            error: 'you have a problemn in your request',
         });
     }
 };
+
+handler._users.get = (requiestProperties, callback) => {
+    callback(200);
+};
+
+handler._users.put = (requiestProperties, callback) => {};
+
+handler._users.delete = (requiestProperties, callback) => {};
+
 module.exports = handler;

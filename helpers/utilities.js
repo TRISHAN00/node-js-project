@@ -6,28 +6,31 @@
  * Date: 03-Aug-2021
  *
  */
-
 // dependencies
 const crypto = require('crypto');
-const environment = require('./environments');
+
 // module scaffolding
 const utilities = {};
 
-// jsong file to string
-utilities.parseJSON = (jsongString) => {
+// make string to object
+utilities.passeJSON = (jsonString) => {
     let output;
+
     try {
-        output = JSON.parse(jsongString);
+        output = JSON.parse(jsonString);
     } catch {
         output = {};
     }
     return output;
 };
 
-// hash any string data
+// hash
 utilities.hash = (str) => {
-    if (typeof str === 'string' && str > 0) {
-        const hash = crypto.createHmac('sha256', environment.secretKey).update(str).digest('hex');
+    if (typeof str === 'string' && str.length > 0) {
+        const hash = crypto
+            .createHmac('sha256', 'asdfljaslkdjflkjsldkfj')
+            .update(str)
+            .digest('hex');
         return hash;
     }
 

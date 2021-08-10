@@ -8,6 +8,7 @@
     "prettier": "^2.3.2"
   },
   "scripts": {
-    "start": "nodemon index"
+    "start": "set NODE_ENV=staging && nodemon index",
+    "production": "set NODE_ENV=production && nodemon index"
   }
 }
